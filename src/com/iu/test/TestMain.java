@@ -2,6 +2,8 @@ package com.iu.test;
 
 import com.iu.countries.CountriesDAO;
 import com.iu.countries.CountriesView;
+import com.iu.employees.EmployeesDAO;
+import com.iu.employees.EmployeesView;
 import com.iu.regions.RegionsDAO;
 import com.iu.regions.RegionsView;
 import com.iu.util.DBConnector;
@@ -13,7 +15,8 @@ public class TestMain {
 		CountriesView cv = new CountriesView();
 		RegionsDAO rdao = new RegionsDAO();
 		RegionsView rv = new RegionsView();
-
+		EmployeesDAO edao = new EmployeesDAO();
+		EmployeesView ev = new EmployeesView();
 		
 //		try {
 //			DBConnector.getConnection();
@@ -30,7 +33,8 @@ public class TestMain {
 //		}
 		
 		try {
-			cv.view(cdao.getList());
+			ev.view(edao.getRow(144));
+//			cv.view(cdao.getList());
 //			cv.view(cdao.getDetail("AR"));
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
