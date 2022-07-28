@@ -1,5 +1,7 @@
 package com.iu.employees;
 
+import java.util.ArrayList;
+
 public class EmployeesView {
 	
 	public void view(EmployeesDTO employee) {
@@ -15,6 +17,15 @@ public class EmployeesView {
 		System.out.println(employee.getManager_id());
 		System.out.println(employee.getDepartment_id());
 		
+	}
+	
+	public void view(ArrayList<EmployeesDTO> ar) {
+		
+		for(EmployeesDTO edto:ar) {
+			this.view(edto);
+			System.out.println("----------------------------");
+			
+		}
 	}
 
 }

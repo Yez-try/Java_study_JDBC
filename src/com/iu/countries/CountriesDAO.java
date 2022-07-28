@@ -9,32 +9,45 @@ import com.iu.util.DBConnector;
 
 public class CountriesDAO {
 	
-	public CountriesDTO getDetail(String country_id) throws Exception{
+	public ArrayList<CountriesDTO> getDetail(String country_id) throws Exception{
 		//1. 로그인하고 DB연결하기
 		Connection con = DBConnector.getConnection();
 		
 		//2. SQL문 전달
-		String sql = "select * from countries where country_id=?";
+//		String sql = "select * from countries where country_id like '%?%'"; //이렇게 하면 에러가 남. 왜냐면 홑따옴표를 자동으로 set할 때 넣어주기 때문에
+//		String sql = "select * from countries where country_id like ?"; //1번방법
+		String sql = "select * from countries where country_id like '%'||?||'%'"; //2번방법
+		
+		
+		
+		
+		
 		PreparedStatement st = con.prepareStatement(sql);
+//		st.setString(1, "%"+country_id+"%");//1번방법
+		st.setString(1, country_id); // 2번방법
+		
+		
 		
 		//3. 변수값 세팅 후 전송
-		st.setString(1, country_id);
+		
+		
 		
 		ResultSet rs = st.executeQuery();
 		
 		//4. 결과 처리
-		
-		CountriesDTO cdto = new CountriesDTO();
-		if(rs.next()) {
+		ArrayList<CountriesDTO> ar = new ArrayList<>();
+		while(rs.next()) {
+			CountriesDTO cdto = new CountriesDTO();
 			
 			cdto.setCountry_id(rs.getString("COUNTRY_ID"));
 			cdto.setCountry_name(rs.getString("COUNTRY_NAME"));
 			cdto.setRegion_id(rs.getInt("REGION_ID"));
-
+			
+			ar.add(cdto);
 		}
 		DBConnector.disConnect(rs, st, con);
 		
-		return cdto;
+		return ar;
 	}
 	
 	public ArrayList<CountriesDTO> getList() throws Exception {

@@ -9,19 +9,50 @@ import com.iu.util.DBConnector;
 
 public class EmployeesDAO {
 	
-	public EmployeesDTO getRow(int employee_id) throws Exception{
-		
+	public void getSalaryInfo() throws Exception{
+		//1.DB와 연결
 		Connection con = DBConnector.getConnection();
 		
-		String sql = "SELECT * FROM EMPLOYEES WHERE EMPLOYEE_ID=?";
+		//2.sql문 작성
+		String sql = "select sum(salary), avg(salary), max(salary) from employees";
 		
+		//3. 미리 전송
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setInt(1, employee_id);
 		
 		ResultSet rs = st.executeQuery();
 		
-		EmployeesDTO edto = new EmployeesDTO();
+		int sum =0;
+		double avg =0;
+		int max =0;
+		
+		
 		if(rs.next()) {
+			sum = rs.getInt("SUM(SALARY)");
+			avg = rs.getDouble("AVG(salary)");
+			max = rs.getInt("max(salary)");
+		}
+		System.out.println(sum+" \t "+avg+" \t"+ max);
+		
+	}
+	
+	public EmployeesDTO getRow(int employee_id) throws Exception{
+		//1.DB와 연결
+		Connection con = DBConnector.getConnection();
+		
+		//2.sql문 작성
+		String sql = "SELECT * FROM EMPLOYEES WHERE EMPLOYEE_ID=?";
+		
+		//3. 미리 전송
+		PreparedStatement st = con.prepareStatement(sql);
+		
+		//4. ?값 셋팅하기
+		st.setInt(1, employee_id);
+		
+		//5.
+		ResultSet rs = st.executeQuery();
+		
+		EmployeesDTO edto = new EmployeesDTO();
+		if(rs.next()) {//데이터를 꺼내기 위해서는 next()메서드를 꼭 써줘야한다.
 			edto.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
 			edto.setFirst_name(rs.getString("FIRST_NAME"));
 			edto.setLast_name(rs.getString("LAST_NAME"));
@@ -35,6 +66,7 @@ public class EmployeesDAO {
 			edto.setDepartment_id(rs.getInt("DEPARTMENT_ID"));
 		}
 		
+		DBConnector.disConnect(rs, st, con);
 		return edto;
 	}
 	
@@ -45,7 +77,7 @@ public class EmployeesDAO {
 		String sql = "SELECT * FROM EMPLOYEES";
 		PreparedStatement st = con.prepareStatement(sql);
 		
-		ResultSet rs = st.getResultSet();
+		ResultSet rs = st.executeQuery();
 		
 		ArrayList<EmployeesDTO> ar = new ArrayList<>();
 		while(rs.next()) {
