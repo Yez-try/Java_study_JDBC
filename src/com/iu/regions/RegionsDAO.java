@@ -8,9 +8,31 @@ import java.util.ArrayList;
 import com.iu.util.DBConnector;
 
 public class RegionsDAO  {
+	//3. Regions 에 데이터 추가
+	public int setRegion(RegionsDTO rdto) throws Exception{
+		Connection con = DBConnector.getConnection();
+		
+		String sql = "INSERT INTO REGIONS (REGION_ID,REGION_NAME) VALUES (? , ?)";
+		
+		PreparedStatement st = con.prepareStatement(sql);
+		
+		
+		st.setInt(1, rdto.getRegion_id());
+		st.setString(2, rdto.getRegion_name());
+		//위까지는 동일
+		
+		//최종 전송 후 결과 처리
+		//sql에서 insert를 실행하면 다음과 같은 값이 뜬다.
+		//1 행 이(가) 삽입되었습니다. 맨앞의 숫자를 가져온다.
+		int result = st.executeUpdate();//0이면 실패 아니면 성공
+		//커밋은 자동으로 실행된다.
+		
+		DBConnector.disConnect(st, con);
+		return result;
+	}
+	
 	
 	//1.Regions의 모든 데이터 가져오기
-	
 	public ArrayList<RegionsDTO> getList() throws Exception {
 		//DB에 접근해서 가져오려고 해
 		//1. 로그인하고 DB연결하기

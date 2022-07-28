@@ -9,6 +9,25 @@ import com.iu.util.DBConnector;
 
 public class CountriesDAO {
 	
+	//INSERT메서드 만들기
+	public int setCountry(CountriesDTO cdto) throws Exception{
+		
+		Connection con = DBConnector.getConnection();
+		
+		String sql = "INSERT INTO countries (REGION_ID, COUNTRY_NAME, COUNTRY_ID) VALUES (?, ?, ?)";
+		
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, cdto.getRegion_id());
+		st.setString(2, cdto.getCountry_name());
+		st.setString(3, cdto.getCountry_id());
+		
+		int result = st.executeUpdate();
+		
+		DBConnector.disConnect(st, con);
+		
+		return result;
+	}
+	
 	public ArrayList<CountriesDTO> getDetail(String country_id) throws Exception{
 		//1. 로그인하고 DB연결하기
 		Connection con = DBConnector.getConnection();
