@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import com.iu.util.DBConnector;
 
 public class RegionsDAO  {
+	
+	//4. Regions 에 업데이트
+	
+	
 	//3. Regions 에 데이터 추가
 	public int setRegion(RegionsDTO rdto) throws Exception{
 		Connection con = DBConnector.getConnection();
